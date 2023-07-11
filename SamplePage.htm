@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!--
+    Note: transparency background color is set from WebView2Browser.cpp via script
+    -->
+    <!-- give mouse cursor pointer cursor for visual feedback that control is clickable -->
+    <style>
+        .pointer {
+            cursor: pointer;    
+        }
+    </style>
+    <script>
+        function list_elems() {
+            var elems = document.getElementsByTagName("button");
+            var msg = "found " + elems.length + " buttons\n";
+            for (var i = 0; i < elems.length; i++) {
+                var elem = elems[i];
+                msg += elem.id;
+                var rect = elem.getBoundingClientRect();
+                msg += " [" + rect.x + "," + rect.y + "," + rect.width + "," + rect.height + "]";
+                msg += "\n";
+            }
+            return msg;
+        }
+        function on_load() {
+            window.chrome.webview.postMessage(list_elems());
+        }
+        function btn_clicked(id) {
+            var elem = document.getElementById(id);
+            elem.innerHTML = elem.innerHTML == "Click Me" ? "Clicked " + id : "Click Me";
+        }
+    </script>
+</head>
+<body onload="on_load()">
+    <div>
+        <button class="pointer" id="btn1" onclick="btn_clicked('btn1')" style="width: 200px; height: 200px; margin: 30px">Click Me</button>
+        <button class="pointer" id="btn2" onclick="btn_clicked('btn2')" style="width: 200px; height: 200px; margin: 30px; border-radius: 20px">Click Me</button>
+        <button class="pointer" id="btn3" onclick="btn_clicked('btn3')" style="width: 200px; height: 200px; margin: 30px; border-radius: 50% ">Click Me</button>
+    </div>
+</body>
+</html>
